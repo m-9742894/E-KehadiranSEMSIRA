@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<title>Scan RFID</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html">
+        <button class="btn">Kembali</button>
+    </a>
+
+    <div class="card" style="text-align:center;">
+        <h2>SILA IMBAS KAD RFID</h2>
+        <input type="text" id="rfid-listener"
+               placeholder="UID RFID"
+               onkeydown="handleScanInput(event)">
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
