@@ -1,110 +1,276 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-<meta charset="UTF-8">
-<title>Dashboard Host</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL HOST SEMSIRA</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { 
+            --bg-color: #0f172a; 
+            --panel-bg: #1e293b; 
+            --primary: #0ea5e9; 
+            --success: #22c55e; 
+            --danger: #ef4444; 
+            --warning: #f59e0b; 
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8; 
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); }
+        .hidden { display: none !important; }
+        
+        /* Navigation */
+        nav { 
+            background-color: var(--panel-bg); 
+            padding: 15px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 2px solid var(--primary); 
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-brand { font-size: 1.2rem; font-weight: bold; color: var(--primary); letter-spacing: 1px; }
+        .nav-links button { 
+            background: none; border: none; color: var(--text-main); 
+            margin-left: 15px; cursor: pointer; font-size: 0.9rem; padding: 5px; 
+            transition: 0.3s;
+        }
+        .nav-links button:hover { color: var(--primary); }
+        .nav-links button.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .card { background: var(--panel-bg); padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 20px; }
+        .sub-card { background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 15px; }
+        
+        /* Buttons & Inputs */
+        button.btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button.btn:hover { opacity: 0.8; }
+        .btn-success { background: var(--success); }
+        .btn-danger { background: var(--danger); }
+        .btn-warning { background: var(--warning); color: #000; }
+        
+        input, select { 
+            width: 100%; padding: 10px; margin: 8px 0; 
+            border-radius: 5px; border: 1px solid #334155; 
+            background: #0f172a; color: white; 
+        }
+
+        /* Grid System */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #334155; }
+        th { color: var(--primary); background: rgba(14, 165, 233, 0.05); }
+
+        @media print {
+            nav, .no-print, button { display: none !important; }
+            body { background: white; color: black; }
+            .card { border: 1px solid #ccc; box-shadow: none; color: black; }
+        }
+    </style>
 </head>
 <body>
 
-<nav>
-    <h1>PORTAL HOST SEMSIRA</h1>
-    <button onclick="logout()">Keluar</button>
-</nav>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
 
-<div class="container">
+        const firebaseConfig = {
+            apiKey: "AIzaSyCTbaHD3g-uZaevdunXRa4_lhjxgeyoucw",
+            authDomain: "e-kehadiran-semsira-acd5a.firebaseapp.com",
+            projectId: "e-kehadiran-semsira-acd5a",
+            storageBucket: "e-kehadiran-semsira-acd5a.firebasestorage.app",
+            messagingSenderId: "442105036322",
+            appId: "1:442105036322:web:931b853f80efd72381d47b",
+            measurementId: "G-VD86JJJYMS"
+        };
 
-    <h2>Host Utama</h2>
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        console.log("Firebase Host Dashboard Initialized");
+    </script>
 
-    <!-- MENU BUTTON -->
-    <div class="dashboard-menu">
+    <nav>
+        <div class="nav-brand"><i class="fas fa-server"></i> PORTAL HOST SEMSIRA</div>
+        <div class="nav-links">
+            <button onclick="switchMenu('statistik')" id="nav-statistik" class="active">Keseluruhan</button>
+            <button onclick="switchMenu('kelas-stats')" id="nav-kelas-stats">Kehadiran Kelas</button>
+            <button onclick="switchMenu('carian')" id="nav-carian">Carian Murid</button>
+            <button onclick="switchMenu('datamurid')" id="nav-datamurid">Urus Data</button>
+            <button onclick="switchMenu('sejarah')" id="nav-sejarah">Sejarah</button>
+            <button onclick="switchMenu('tetapan')" id="nav-tetapan">Tetapan</button>
+            <button onclick="logout()" class="btn-danger" style="padding: 5px 10px; border-radius: 4px; margin-left: 20px;">Keluar</button>
+        </div>
+    </nav>
 
-        <button class="btn" onclick="switchMenu('menu-host-keseluruhan')">
-            Keseluruhan
-        </button>
+    <div class="container">
+        
+        <div id="menu-host-statistik" class="host-section">
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3><i class="fas fa-chart-pie"></i> Statistik Keseluruhan</h3>
+                    <div class="no-print">
+                        <input type="date" id="host-overall-date" style="width: 180px;" onchange="updateMainStats()">
+                    </div>
+                </div>
+                <div style="height: 300px; margin: 20px 0;">
+                    <canvas id="hostOverallChart"></canvas>
+                </div>
+                <div class="grid-3">
+                    <div class="sub-card"><h4 style="color: var(--success);">Hadir</h4><ul id="list-hadir" style="margin-left:20px; margin-top:10px; font-size:0.9rem;"></ul></div>
+                    <div class="sub-card"><h4 style="color: var(--warning);">Lewat</h4><ul id="list-lewat" style="margin-left:20px; margin-top:10px; font-size:0.9rem;"></ul></div>
+                    <div class="sub-card"><h4 style="color: var(--danger);">Tidak Hadir</h4><ul id="list-takhadir" style="margin-left:20px; margin-top:10px; font-size:0.9rem;"></ul></div>
+                </div>
+            </div>
+        </div>
 
-        <button class="btn btn-success" onclick="switchMenu('menu-host-kelas-stats')">
-            Kehadiran Kelas
-        </button>
+        <div id="menu-host-kelas-stats" class="host-section hidden">
+            <div class="card">
+                <h3><i class="fas fa-chalkboard"></i> Statistik Mengikut Kelas</h3>
+                <div id="host-kelas-grid" class="grid-3" style="margin-top: 20px;">
+                    </div>
+            </div>
+        </div>
 
-        <button class="btn btn-warning" onclick="switchMenu('menu-host-carian')">
-            Carian Murid
-        </button>
+        <div id="menu-host-carian" class="host-section hidden">
+            <div class="card">
+                <h3><i class="fas fa-search"></i> Carian Murid</h3>
+                <div class="grid-2" style="margin-top:15px;">
+                    <input type="text" id="input-carian" placeholder="Masukkan nama atau No KP murid..." onkeyup="searchMurid()">
+                    <select id="filter-kelas-carian" onchange="searchMurid()">
+                        <option value="">Semua Kelas</option>
+                    </select>
+                </div>
+                <table id="table-carian">
+                    <thead>
+                        <tr>
+                            <th>Nama Murid</th>
+                            <th>No KP</th>
+                            <th>Kelas</th>
+                            <th>Tindakan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="result-carian"></tbody>
+                </table>
+            </div>
+        </div>
 
-        <button class="btn" onclick="switchMenu('menu-host-datamurid')">
-            Urus Data
-        </button>
+        <div id="menu-host-datamurid" class="host-section hidden">
+            <div class="card">
+                <h3><i class="fas fa-user-tie"></i> Pengurusan Guru</h3>
+                <div class="sub-card no-print" style="border: 1px dashed var(--primary); margin-top:15px;">
+                    <h4>Tambah Guru Baru</h4>
+                    <div class="grid-2">
+                        <input type="text" id="new-g-name" placeholder="Nama Guru">
+                        <input type="email" id="new-g-email" placeholder="E-mel">
+                    </div>
+                    <button class="btn btn-success" onclick="alert('Fungsi tambah guru sedia untuk dihubungkan ke Firebase!')">Simpan Guru</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr><th>Nama</th><th>E-mel</th><th>Tindakan</th></tr>
+                    </thead>
+                    <tbody id="host-table-guru"></tbody>
+                </table>
+            </div>
+        </div>
 
-        <button class="btn btn-danger" onclick="switchMenu('menu-host-sejarah')">
-            Sejarah
-        </button>
+        <div id="menu-host-sejarah" class="host-section hidden">
+            <div class="card">
+                <h3><i class="fas fa-history"></i> Laporan Sejarah</h3>
+                <div class="grid-3 no-print" style="margin-top: 15px;">
+                    <select id="sej-tahun"><option>2024</option><option selected>2025</option></select>
+                    <select id="sej-kelas"><option value="">Pilih Kelas</option></select>
+                    <button class="btn" onclick="alert('Menjana laporan...')">Lihat Rekod</button>
+                </div>
+            </div>
+        </div>
 
-        <button class="btn" onclick="switchMenu('menu-host-tetapan')">
-            Tetapan Cuti
-        </button>
+        <div id="menu-host-tetapan" class="host-section hidden">
+            <div class="card">
+                <h3><i class="fas fa-cog"></i> Tetapan Sistem</h3>
+                <div class="grid-2" style="margin-top:20px;">
+                    <div class="sub-card">
+                        <h4>Waktu Kehadiran</h4>
+                        <label>Mula:</label><input type="time" value="07:00">
+                        <label>Lewat Selepas:</label><input type="time" value="07:30">
+                        <button class="btn btn-warning" style="width:100%; margin-top:10px;">Kemaskini Waktu</button>
+                    </div>
+                    <div class="sub-card">
+                        <h4>Hari Cuti</h4>
+                        <input type="date">
+                        <input type="text" placeholder="Sebab Cuti">
+                        <button class="btn btn-primary" style="width:100%; margin-top:10px;">Tambah Cuti</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 
+    <script>
+        let hostChart = null;
 
-    <!-- ============================= -->
-    <!--         MENU CONTENT          -->
-    <!-- ============================= -->
+        // Initialize on load
+        window.onload = () => {
+            document.getElementById('host-overall-date').value = new Date().toISOString().split('T')[0];
+            initChart();
+            // Load dummy data / logic from original file
+        };
 
-    <!-- KESELURUHAN -->
-    <div id="menu-host-keseluruhan" class="card hidden">
-        <h3>Statistik Keseluruhan</h3>
-        <div id="menu-host-statistik"></div>
-    </div>
+        function switchMenu(menuId) {
+            // Hide all sections
+            document.querySelectorAll('.host-section').forEach(s => s.classList.add('hidden'));
+            // Remove active from all nav buttons
+            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+            
+            // Show target
+            document.getElementById(`menu-host-${menuId}`).classList.remove('hidden');
+            document.getElementById(`nav-${menuId}`).classList.add('active');
+            
+            if(menuId === 'statistik') initChart();
+        }
 
+        function initChart() {
+            const ctx = document.getElementById('hostOverallChart').getContext('2d');
+            if(hostChart) hostChart.destroy();
+            
+            hostChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Hadir', 'Lewat', 'Tidak Hadir'],
+                    datasets: [{
+                        data: [70, 10, 20],
+                        backgroundColor: ['#22c55e', '#f59e0b', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#f8fafc' } }
+                    }
+                }
+            });
+        }
 
-    <!-- KEHADIRAN KELAS -->
-    <div id="menu-host-kelas-stats" class="card hidden">
-        <h3>Kehadiran Mengikut Kelas</h3>
-        <div id="menu-host-kelas-stats-content"></div>
-    </div>
+        function logout() {
+            if(confirm("Adakah anda pasti ingin keluar?")) {
+                window.location.href = "index.html"; // Redirect back to login
+            }
+        }
 
-
-    <!-- CARIAN MURID -->
-    <div id="menu-host-carian" class="card hidden">
-        <h3>Carian Murid</h3>
-
-        <input type="text" 
-               placeholder="Masukkan nama atau IC murid"
-               onkeyup="carianMuridHost(this.value)">
-
-        <div id="menu-host-carian-result"></div>
-    </div>
-
-
-    <!-- URUS DATA -->
-    <div id="menu-host-datamurid" class="card hidden">
-        <h3>Urus Data Murid & Guru</h3>
-
-        <div id="menu-host-guru"></div>
-        <div id="menu-host-datamurid-content"></div>
-    </div>
-
-
-    <!-- SEJARAH -->
-    <div id="menu-host-sejarah" class="card hidden">
-        <h3>Sejarah Kehadiran</h3>
-
-        <div id="menu-host-sejarah-content"></div>
-    </div>
-
-
-    <!-- TETAPAN CUTI -->
-    <div id="menu-host-tetapan" class="card hidden">
-        <h3>Tetapan Hari Cuti & Operasi</h3>
-
-        <div id="menu-host-tetapan-content"></div>
-    </div>
-
-
-</div>
-
-<script src="app.js"></script>
-
+        function searchMurid() {
+            const val = document.getElementById('input-carian').value.toLowerCase();
+            // Integration logic for searching
+        }
+    </script>
 </body>
 </html>
