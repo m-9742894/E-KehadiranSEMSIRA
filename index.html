@@ -2,44 +2,194 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEM KEHADIRAN MURID SEMSIRA</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* 延续 index3 的核心配色方案 */
+        :root { 
+            --bg-color: #0f172a; 
+            --panel-bg: #1e293b; 
+            --primary: #0ea5e9; 
+            --success: #22c55e; 
+            --danger: #ef4444; 
+            --warning: #f59e0b; 
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8; 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 顶部装饰条 */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--success), var(--danger));
+        }
+
+        .container { 
+            max-width: 1100px; 
+            width: 90%; 
+            margin: 20px auto; 
+            text-align: center; 
+        }
+
+        h1 { 
+            font-size: 2.5rem; 
+            margin-bottom: 10px; 
+            color: var(--text-main);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 50px;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        /* 统一的 Grid 布局 */
+        .grid-3 { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 25px; 
+            margin-top: 20px;
+        }
+
+        /* 延续 index3 的 Card 设计 */
+        .card { 
+            background: var(--panel-bg); 
+            padding: 40px 30px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); 
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.2);
+            border-color: var(--primary);
+        }
+
+        .card i {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card h3 {
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            color: var(--text-main);
+        }
+
+        /* 统一的按钮风格 */
+        .btn { 
+            width: 100%;
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 14px 20px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 1rem;
+            transition: 0.3s; 
+            text-decoration: none;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover { filter: brightness(1.2); }
+        .btn-success { background: var(--success); }
+        .btn-danger { background: var(--danger); }
+
+        .link-secondary {
+            margin-top: 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .link-secondary:hover {
+            color: var(--primary);
+        }
+
+        /* 页脚 */
+        footer {
+            margin-top: 50px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .grid-3 { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-<nav id="navbar" class="hidden"></nav>
+<div class="top-bar"></div>
 
-<div class="container" style="text-align:center; margin-top:10vh;">
-    <h1 style="color:#0ea5e9;">SISTEM KEHADIRAN MURID SEMSIRA</h1>
+<div class="container">
+    <div style="margin-bottom: 40px;">
+        <i class="fas fa-graduation-cap" style="font-size: 4rem; color: var(--primary); margin-bottom: 15px;"></i>
+        <h1>SEMSIRA ATTENDANCE</h1>
+        <p class="subtitle">Sistem Pengurusan Kehadiran Digital Terintegrasi</p>
+    </div>
 
     <div class="grid-3">
 
         <div class="card">
-            <h3><i class="fas fa-user-tie"></i> Portal Guru</h3>
-            <a href="login-guru.html">
-                <button class="btn">Log Masuk Guru</button>
-            </a>
-            <br><br>
-            <a href="signup-guru.html">Daftar Akaun Baru</a>
+            <i class="fas fa-user-tie" style="color: var(--primary);"></i>
+            <h3>Portal Guru</h3>
+            <a href="login-guru.html" class="btn">Log Masuk Guru</a>
+            <a href="signup-guru.html" class="link-secondary">Daftar Akaun Baru</a>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--success);">
+            <i class="fas fa-qrcode" style="color: var(--success);"></i>
+            <h3>Imbasan Pelajar</h3>
+            <a href="scan.html" class="btn btn-success">Mula Imbasan (SCAN)</a>
+            <p class="link-secondary" style="cursor: default;">Sila pastikan kamera aktif</p>
         </div>
 
         <div class="card">
-            <h3><i class="fas fa-id-card"></i> Imbasan Pelajar</h3>
-            <a href="scan.html">
-                <button class="btn btn-success">SCAN KEHADIRAN</button>
-            </a>
-        </div>
-
-        <div class="card">
-            <h3><i class="fas fa-server"></i> Portal Host</h3>
-            <a href="login-host.html">
-                <button class="btn btn-danger">Log Masuk Host</button>
-            </a>
+            <i class="fas fa-server" style="color: var(--danger);"></i>
+            <h3>Portal Host</h3>
+            <a href="login-host.html" class="btn btn-danger">Log Masuk Host</a>
+            <a href="#" class="link-secondary">Penyelenggaraan Sistem</a>
         </div>
 
     </div>
+
+    <footer>
+        &copy; 2025 SEMSIRA Digital Management System. All Rights Reserved.
+    </footer>
 </div>
 
 <script src="app.js"></script>
