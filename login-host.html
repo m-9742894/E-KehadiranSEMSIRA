@@ -14,18 +14,33 @@
 
     <div class="card">
         <h2>Log Masuk Host</h2>
+
         <input type="email" id="login-host-email" 
-               placeholder="E-mel Host"
-               value="hostsemsira@gmail.com">
+               placeholder="E-mel Host">
 
         <input type="password" id="login-host-pass" 
-               placeholder="Kata Laluan"
-               value="Semsira1969">
+               placeholder="Kata Laluan">
 
-        <button class="btn btn-danger" onclick="login('host')">Masuk</button>
+        <button class="btn btn-danger" onclick="loginHost()">Masuk</button>
     </div>
 </div>
 
-<script src="app.js"></script>
+<script>
+function loginHost() {
+    const email = document.getElementById("login-host-email").value;
+    const pass = document.getElementById("login-host-pass").value;
+
+    if(email === "hostsemsira@gmail.com" && pass === "Semsira1969") {
+        // simpan session
+        localStorage.setItem("hostLogin", "true");
+
+        // redirect
+        window.location.href = "dashboard-host.html";
+    } else {
+        alert("E-mel atau kata laluan salah!");
+    }
+}
+</script>
+
 </body>
 </html>
