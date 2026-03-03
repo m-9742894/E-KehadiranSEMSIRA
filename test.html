@@ -5,42 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEM KEHADIRAN MURID SEMSIRA</title>
     <script type="module">
+        // 1. 导入 Firebase SDK 模块
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+        // 2. 您的最新配置（已更新为新加坡区域 URL）
         const firebaseConfig = {
         apiKey: "AIzaSyCTbaHD3g-uZaevdunXRa4_lhjxgeyoucw",
         authDomain: "e-kehadiran-semsira-acd5a.firebaseapp.com",
         projectId: "e-kehadiran-semsira-acd5a",
-        databaseURL: "https://e-kehadiran-semsira-acd5a-default-rtdb.firebaseio.com/",
+        databaseURL: "https://e-kehadiran-semsira-acd5a-default-rtdb.asia-southeast1.firebasedatabase.app/",
         storageBucket: "e-kehadiran-semsira-acd5a.appspot.com",
         appId: "1:846560411210:web:809b44c680a6b579178f24"
         };
 
+        // 3. 初始化 Firebase
+        try {
         const app = initializeApp(firebaseConfig);
         const rtdb = getDatabase(app);
         const dbRef = ref(rtdb, 'semsira_main_db');
 
-        // --- 自动同步逻辑 ---
+        console.log("Firebase 正在尝试连接...");
+
+        // 4. 【核心】实时监听云端数据
         onValue(dbRef, (snapshot) => {
         const data = snapshot.val();
+
+        // 检查 window.db 是否已经由后续的脚本初始化
+        if (!window.db) {
+        console.warn("window.db 尚未就绪，等待注入...");
+        return;
+        }
+
         if (data) {
-        console.log("Firebase 数据已送达，正在注入本地 DB...");
-        // 使用 Object.assign 保持引用不变，防止原有代码逻辑崩溃
+        console.log("Firebase 数据已送达，正在同步到本地...");
+        // 使用 Object.assign 深度更新本地 db 对象，确保不破坏原有引用
         Object.assign(window.db, data);
 
-        // 触发 UI 自动刷新
-        if (typeof autoRefreshActivePage === "function") autoRefreshActivePage();
+        // 实时刷新当前活跃页面（UI 自动更新）
+        if (typeof autoRefreshActivePage === "function") {
+        autoRefreshActivePage();
+        }
         } else {
-        // 初始状态：云端无数据，将本地默认 db 上传
+        // 如果云端是空的（第一次运行），将本地初始化数据上传
+        console.log("云端无数据，正在初始化云端数据库...");
         set(dbRef, window.db);
         }
+        }, (error) => {
+        console.error("数据库读取失败，请检查 Firebase Rules 权限！", error);
         });
 
-        // 定义全局上传函数
+        // 5. 【核心】定义全局上传函数供本地函数调用
         window.syncNow = function() {
-        set(dbRef, window.db).then(() => console.log("同步成功"));
+        if (!window.db) return;
+
+        // 将整个 window.db 状态推送到 Firebase
+        set(dbRef, window.db)
+        .then(() => {
+        console.log("数据成功同步至云端！");
+        })
+        .catch((err) => {
+        console.error("云端同步失败：", err);
+        alert("Gagal sinkronisasi awan. Sila semak talian internet.");
+        });
         };
+
+        } catch (e) {
+        console.error("Firebase 初始化异常：", e);
+        }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
