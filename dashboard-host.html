@@ -4,26 +4,107 @@
 <meta charset="UTF-8">
 <title>Dashboard Host</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-<nav id="navbar"></nav>
+<nav>
+    <h1>PORTAL HOST SEMSIRA</h1>
+    <button onclick="logout()">Keluar</button>
+</nav>
 
 <div class="container">
+
     <h2>Host Utama</h2>
 
-    <div id="menu-host-statistik"></div>
-    <div id="menu-host-kelas-stats"></div>
-    <div id="menu-host-datamurid"></div>
-    <div id="menu-host-guru"></div>
-    <div id="menu-host-tetapan"></div>
-    <div id="menu-host-sejarah"></div>
+    <!-- MENU BUTTON -->
+    <div class="dashboard-menu">
 
-    <a href="index.html">
-        <button class="btn btn-danger">Keluar</button>
-    </a>
+        <button class="btn" onclick="switchMenu('menu-host-keseluruhan')">
+            Keseluruhan
+        </button>
+
+        <button class="btn btn-success" onclick="switchMenu('menu-host-kelas-stats')">
+            Kehadiran Kelas
+        </button>
+
+        <button class="btn btn-warning" onclick="switchMenu('menu-host-carian')">
+            Carian Murid
+        </button>
+
+        <button class="btn" onclick="switchMenu('menu-host-datamurid')">
+            Urus Data
+        </button>
+
+        <button class="btn btn-danger" onclick="switchMenu('menu-host-sejarah')">
+            Sejarah
+        </button>
+
+        <button class="btn" onclick="switchMenu('menu-host-tetapan')">
+            Tetapan Cuti
+        </button>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!--         MENU CONTENT          -->
+    <!-- ============================= -->
+
+    <!-- KESELURUHAN -->
+    <div id="menu-host-keseluruhan" class="card hidden">
+        <h3>Statistik Keseluruhan</h3>
+        <div id="menu-host-statistik"></div>
+    </div>
+
+
+    <!-- KEHADIRAN KELAS -->
+    <div id="menu-host-kelas-stats" class="card hidden">
+        <h3>Kehadiran Mengikut Kelas</h3>
+        <div id="menu-host-kelas-stats-content"></div>
+    </div>
+
+
+    <!-- CARIAN MURID -->
+    <div id="menu-host-carian" class="card hidden">
+        <h3>Carian Murid</h3>
+
+        <input type="text" 
+               placeholder="Masukkan nama atau IC murid"
+               onkeyup="carianMuridHost(this.value)">
+
+        <div id="menu-host-carian-result"></div>
+    </div>
+
+
+    <!-- URUS DATA -->
+    <div id="menu-host-datamurid" class="card hidden">
+        <h3>Urus Data Murid & Guru</h3>
+
+        <div id="menu-host-guru"></div>
+        <div id="menu-host-datamurid-content"></div>
+    </div>
+
+
+    <!-- SEJARAH -->
+    <div id="menu-host-sejarah" class="card hidden">
+        <h3>Sejarah Kehadiran</h3>
+
+        <div id="menu-host-sejarah-content"></div>
+    </div>
+
+
+    <!-- TETAPAN CUTI -->
+    <div id="menu-host-tetapan" class="card hidden">
+        <h3>Tetapan Hari Cuti & Operasi</h3>
+
+        <div id="menu-host-tetapan-content"></div>
+    </div>
+
+
 </div>
 
 <script src="app.js"></script>
+
 </body>
 </html>
