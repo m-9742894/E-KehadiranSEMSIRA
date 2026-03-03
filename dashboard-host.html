@@ -6,270 +6,244 @@
     <title>PORTAL HOST SEMSIRA</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         :root { 
-            --bg-color: #0f172a; 
-            --panel-bg: #1e293b; 
-            --primary: #0ea5e9; 
-            --success: #22c55e; 
-            --danger: #ef4444; 
-            --warning: #f59e0b; 
-            --text-main: #f8fafc; 
-            --text-muted: #94a3b8; 
+            --bg-color: #0f172a; --panel-bg: #1e293b; --primary: #0ea5e9; 
+            --success: #22c55e; --danger: #ef4444; --warning: #f59e0b; 
+            --text-main: #f8fafc; --text-muted: #94a3b8; 
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
         .hidden { display: none !important; }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
         
         /* Navigation */
-        nav { 
-            background-color: var(--panel-bg); 
-            padding: 15px 20px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 2px solid var(--primary); 
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .nav-brand { font-size: 1.2rem; font-weight: bold; color: var(--primary); letter-spacing: 1px; }
-        .nav-links button { 
-            background: none; border: none; color: var(--text-main); 
-            margin-left: 15px; cursor: pointer; font-size: 0.9rem; padding: 5px; 
-            transition: 0.3s;
-        }
-        .nav-links button:hover { color: var(--primary); }
-        .nav-links button.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+        nav { background-color: var(--panel-bg); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 100; }
+        .nav-links button { background: none; border: none; color: var(--text-main); margin-left: 15px; cursor: pointer; font-size: 0.9rem; transition: 0.3s; padding: 8px 12px; border-radius: 5px; }
+        .nav-links button:hover { background: rgba(14, 165, 233, 0.1); color: var(--primary); }
+        .nav-links button.active { background: var(--primary); color: white; }
 
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        .card { background: var(--panel-bg); padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 20px; }
+        /* UI Elements */
+        .card { background: var(--panel-bg); padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
         .sub-card { background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 15px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         
-        /* Buttons & Inputs */
-        button.btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        button.btn:hover { opacity: 0.8; }
+        button.btn { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+        button.btn:hover { opacity: 0.8; transform: translateY(-1px); }
         .btn-success { background: var(--success); }
         .btn-danger { background: var(--danger); }
         .btn-warning { background: var(--warning); color: #000; }
         
-        input, select { 
-            width: 100%; padding: 10px; margin: 8px 0; 
-            border-radius: 5px; border: 1px solid #334155; 
-            background: #0f172a; color: white; 
-        }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: white; font-size: 0.95rem; }
+        label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
 
-        /* Grid System */
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #0f172a; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 14px; text-align: left; border-bottom: 1px solid #1e293b; }
+        th { color: var(--primary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        tr:hover { background: rgba(255,255,255,0.02); }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #334155; }
-        th { color: var(--primary); background: rgba(14, 165, 233, 0.05); }
+        .clickable-row { cursor: pointer; }
+        .clickable-text:hover { text-decoration: underline; color: var(--primary); cursor: pointer; }
+
+        /* Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
 
         @media print {
-            nav, .no-print, button { display: none !important; }
+            .no-print, nav, .btn, input, select { display: none !important; }
             body { background: white; color: black; }
-            .card { border: 1px solid #ccc; box-shadow: none; color: black; }
+            .card { border: 1px solid #000; box-shadow: none; margin: 0; padding: 10px; }
+            .container { max-width: 100%; margin: 0; padding: 0; }
         }
     </style>
 </head>
 <body>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCTbaHD3g-uZaevdunXRa4_lhjxgeyoucw",
-            authDomain: "e-kehadiran-semsira-acd5a.firebaseapp.com",
-            projectId: "e-kehadiran-semsira-acd5a",
-            storageBucket: "e-kehadiran-semsira-acd5a.firebasestorage.app",
-            messagingSenderId: "442105036322",
-            appId: "1:442105036322:web:931b853f80efd72381d47b",
-            measurementId: "G-VD86JJJYMS"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        console.log("Firebase Host Dashboard Initialized");
-    </script>
-
-    <nav>
-        <div class="nav-brand"><i class="fas fa-server"></i> PORTAL HOST SEMSIRA</div>
-        <div class="nav-links">
-            <button onclick="switchMenu('statistik')" id="nav-statistik" class="active">Keseluruhan</button>
-            <button onclick="switchMenu('kelas-stats')" id="nav-kelas-stats">Kehadiran Kelas</button>
-            <button onclick="switchMenu('carian')" id="nav-carian">Carian Murid</button>
-            <button onclick="switchMenu('datamurid')" id="nav-datamurid">Urus Data</button>
-            <button onclick="switchMenu('sejarah')" id="nav-sejarah">Sejarah</button>
-            <button onclick="switchMenu('tetapan')" id="nav-tetapan">Tetapan</button>
-            <button onclick="logout()" class="btn-danger" style="padding: 5px 10px; border-radius: 4px; margin-left: 20px;">Keluar</button>
+    <nav id="navbar">
+        <div style="font-weight: bold; color: var(--primary); font-size: 1.2rem;">PORTAL HOST SEMSIRA</div>
+        <div class="nav-links" id="nav-menus">
+            <button onclick="switchMenu('statistik', 'host')" id="btn-host-statistik">Keseluruhan</button>
+            <button onclick="switchMenu('kelas-stats', 'host')" id="btn-host-kelas-stats">Kehadiran Kelas</button>
+            <button onclick="switchMenu('datamurid', 'host')" id="btn-host-datamurid">Carian Murid</button>
+            <button onclick="switchMenu('guru', 'host')" id="btn-host-guru">Urus Data</button>
+            <button onclick="switchMenu('sejarah', 'host')" id="btn-host-sejarah">Sejarah</button>
+            <button onclick="switchMenu('tetapan', 'host')" id="btn-host-tetapan">Tetapan</button>
+            <button onclick="logout()" style="color:var(--danger);"><i class="fas fa-sign-out-alt"></i></button>
         </div>
     </nav>
 
-    <div class="container">
+    <div id="page-dashboard-host" class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="color: var(--danger);"><i class="fas fa-server"></i> Host Utama</h2>
+        </div>
         
-        <div id="menu-host-statistik" class="host-section">
+        <div id="menu-host-statistik" class="menu-section host-menu">
             <div class="card">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h3><i class="fas fa-chart-pie"></i> Statistik Keseluruhan</h3>
+                    <h3>Statistik Keseluruhan</h3>
                     <div class="no-print">
-                        <input type="date" id="host-overall-date" style="width: 180px;" onchange="updateMainStats()">
+                        <input type="date" id="host-overall-date" style="width: 200px; margin-right: 10px;" onchange="updateCharts()">
+                        <button class="btn" onclick="window.print()"><i class="fas fa-print"></i> Cetak</button>
                     </div>
                 </div>
-                <div style="height: 300px; margin: 20px 0;">
+                <div style="height: 320px; margin: 20px 0;">
                     <canvas id="hostOverallChart"></canvas>
                 </div>
                 <div class="grid-3">
-                    <div class="sub-card"><h4 style="color: var(--success);">Hadir</h4><ul id="list-hadir" style="margin-left:20px; margin-top:10px; font-size:0.9rem;"></ul></div>
-                    <div class="sub-card"><h4 style="color: var(--warning);">Lewat</h4><ul id="list-lewat" style="margin-left:20px; margin-top:10px; font-size:0.9rem;"></ul></div>
-                    <div class="sub-card"><h4 style="color: var(--danger);">Tidak Hadir</h4><ul id="list-takhadir" style="margin-left:20px; margin-top:10px; font-size:0.9rem;"></ul></div>
+                    <div class="sub-card"><h4 style="color: var(--success);">Hadir</h4><ul id="host-list-hadir" style="margin-left:20px; margin-top:10px;"></ul></div>
+                    <div class="sub-card"><h4 style="color: var(--warning);">Lewat</h4><ul id="host-list-lewat" style="margin-left:20px; margin-top:10px;"></ul></div>
+                    <div class="sub-card"><h4 style="color: var(--danger);">Tidak Hadir</h4><ul id="host-list-takhadir" style="margin-left:20px; margin-top:10px;"></ul></div>
                 </div>
             </div>
         </div>
 
-        <div id="menu-host-kelas-stats" class="host-section hidden">
+        <div id="menu-host-kelas-stats" class="menu-section host-menu hidden">
             <div class="card">
-                <h3><i class="fas fa-chalkboard"></i> Statistik Mengikut Kelas</h3>
-                <div id="host-kelas-grid" class="grid-3" style="margin-top: 20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+                    <h3>Statistik Kehadiran Kelas</h3>
+                    <div class="no-print">
+                        <input type="date" id="host-kelas-date" style="width: 200px; margin-right: 10px;">
+                        <button class="btn" onclick="window.print()"><i class="fas fa-print"></i></button>
                     </div>
+                </div>
+                <div id="host-kelas-grid" class="grid-3"></div>
             </div>
         </div>
-
-        <div id="menu-host-carian" class="host-section hidden">
+        
+        <div id="menu-host-datamurid" class="menu-section host-menu hidden">
             <div class="card">
-                <h3><i class="fas fa-search"></i> Carian Murid</h3>
-                <div class="grid-2" style="margin-top:15px;">
-                    <input type="text" id="input-carian" placeholder="Masukkan nama atau No KP murid..." onkeyup="searchMurid()">
-                    <select id="filter-kelas-carian" onchange="searchMurid()">
-                        <option value="">Semua Kelas</option>
-                    </select>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3><i class="fas fa-search"></i> Carian Data Murid</h3>
                 </div>
-                <table id="table-carian">
-                    <thead>
-                        <tr>
-                            <th>Nama Murid</th>
-                            <th>No KP</th>
-                            <th>Kelas</th>
-                            <th>Tindakan</th>
-                        </tr>
-                    </thead>
-                    <tbody id="result-carian"></tbody>
+                <div class="grid-2 no-print" style="margin-top: 15px;">
+                    <div><label>Cari Nama / No KP:</label><input type="text" id="carian-nama" placeholder="Taip di sini..."></div>
+                    <div><label>Tapis Kelas:</label><select id="carian-kelas"><option value="">Semua Kelas</option></select></div>
+                </div>
+                <table id="jadual-carian-murid" style="margin-top: 20px;">
+                    <thead><tr><th>Nama Murid</th><th>No KP</th><th>Kelas</th><th class="no-print">Tindakan</th></tr></thead>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
-
-        <div id="menu-host-datamurid" class="host-section hidden">
+        
+        <div id="menu-host-guru" class="menu-section host-menu hidden">
             <div class="card">
-                <h3><i class="fas fa-user-tie"></i> Pengurusan Guru</h3>
-                <div class="sub-card no-print" style="border: 1px dashed var(--primary); margin-top:15px;">
-                    <h4>Tambah Guru Baru</h4>
-                    <div class="grid-2">
-                        <input type="text" id="new-g-name" placeholder="Nama Guru">
-                        <input type="email" id="new-g-email" placeholder="E-mel">
+                <div style="display:flex; justify-content:space-between; align-items:center;"><h3>Pengurusan Data Sekolah</h3></div>
+                <div class="sub-card no-print" style="margin-top: 15px; border: 1px dashed var(--primary);">
+                    <h4><i class="fas fa-user-plus"></i> Tambah Guru Baru</h4>
+                    <div class="grid-2" style="margin-top:10px;">
+                        <input type="text" id="add-g-name" placeholder="Nama Guru">
+                        <input type="email" id="add-g-email" placeholder="E-mel">
+                        <input type="text" id="add-g-phone" placeholder="No Telefon">
+                        <input type="text" id="add-g-pass" placeholder="Kata Laluan">
                     </div>
-                    <button class="btn btn-success" onclick="alert('Fungsi tambah guru sedia untuk dihubungkan ke Firebase!')">Simpan Guru</button>
+                    <button class="btn btn-success" style="margin-top:10px;">Tambah Guru</button>
                 </div>
                 <table>
-                    <thead>
-                        <tr><th>Nama</th><th>E-mel</th><th>Tindakan</th></tr>
-                    </thead>
-                    <tbody id="host-table-guru"></tbody>
+                    <thead><tr><th>Nama Guru</th><th>Telefon</th><th>Emel</th><th class="no-print">Tindakan</th></tr></thead>
+                    <tbody id="host-table-guru">
+                        <tr><td>Cikgu Ahmad</td><td>012345678</td><td>ahmad@edu.my</td><td><button class="btn btn-warning" style="padding:5px 10px;">Edit</button></td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
-
-        <div id="menu-host-sejarah" class="host-section hidden">
+        
+        <div id="menu-host-tetapan" class="menu-section host-menu hidden">
             <div class="card">
-                <h3><i class="fas fa-history"></i> Laporan Sejarah</h3>
-                <div class="grid-3 no-print" style="margin-top: 15px;">
-                    <select id="sej-tahun"><option>2024</option><option selected>2025</option></select>
-                    <select id="sej-kelas"><option value="">Pilih Kelas</option></select>
-                    <button class="btn" onclick="alert('Menjana laporan...')">Lihat Rekod</button>
+                <h3><i class="fas fa-calendar-alt"></i> Tetapan Sekolah, Masa & Cuti</h3>
+                <div class="grid-3" style="margin-top: 20px;">
+                    <div class="sub-card">
+                        <h4>Jumlah Hari Operasi Semasa</h4>
+                        <input type="number" id="tetapan-hari" value="190">
+                        <button class="btn btn-success" style="width: 100%;">Simpan Hari</button>
+                    </div>
+                    <div class="sub-card">
+                        <h4 style="color: var(--primary);">Tetapan Waktu Kehadiran</h4>
+                        <div style="margin-top: 10px;">
+                            <label>Buka Kehadiran:</label><input type="time" id="tetapan-waktu-buka" value="06:30">
+                            <label>Mula Lewat:</label><input type="time" id="tetapan-waktu-lewat" value="07:30">
+                            <label>Tutup Kehadiran:</label><input type="time" id="tetapan-waktu-tutup" value="14:00">
+                            <button class="btn btn-warning" style="margin-top: 10px; width: 100%; color: black;"><i class="fas fa-clock"></i> Simpan Waktu</button>
+                        </div>
+                    </div>
+                    <div class="sub-card">
+                        <h4>Senarai Cuti</h4>
+                        <div style="margin-top: 10px;">
+                            <input type="date" id="tambah-cuti-date">
+                            <input type="text" id="tambah-cuti-nama" placeholder="Nama Cuti">
+                            <button class="btn btn-primary" style="width: 100%;">Tambah Cuti</button>
+                        </div>
+                        <ul id="senarai-cuti-ui" style="margin-left: 20px; margin-top: 15px;">
+                            </ul>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div id="menu-host-tetapan" class="host-section hidden">
-            <div class="card">
-                <h3><i class="fas fa-cog"></i> Tetapan Sistem</h3>
-                <div class="grid-2" style="margin-top:20px;">
-                    <div class="sub-card">
-                        <h4>Waktu Kehadiran</h4>
-                        <label>Mula:</label><input type="time" value="07:00">
-                        <label>Lewat Selepas:</label><input type="time" value="07:30">
-                        <button class="btn btn-warning" style="width:100%; margin-top:10px;">Kemaskini Waktu</button>
-                    </div>
-                    <div class="sub-card">
-                        <h4>Hari Cuti</h4>
-                        <input type="date">
-                        <input type="text" placeholder="Sebab Cuti">
-                        <button class="btn btn-primary" style="width:100%; margin-top:10px;">Tambah Cuti</button>
-                    </div>
-                </div>
-            </div>
+    <div id="page-host-student-detail" class="container hidden">
+        <div class="no-print" style="display:flex; justify-content:space-between; margin-bottom: 20px;">
+            <button class="btn" onclick="showPage('page-dashboard-host')"><i class="fas fa-arrow-left"></i> Kembali</button>
+            <button class="btn" onclick="window.print()"><i class="fas fa-print"></i> Cetak Rekod</button>
         </div>
-
+        <div class="card" style="border-top: 4px solid var(--success);">
+            <h2 id="indv-nama" style="color: var(--primary);">NAMA MURID</h2>
+            <p>No KP: <span id="indv-ic">000000000000</span> | Kelas: <span id="indv-kelas">5 SAINS</span></p>
+            <div style="height: 250px; margin: 20px 0;"><canvas id="hostStudentChart"></canvas></div>
+            <div class="grid-3">
+                <div class="sub-card" style="text-align:center; border: 1px solid var(--success);"><h4 style="color: var(--success);">Hadir</h4><div style="font-size: 2rem; font-weight: bold;">150 <small style="font-size:1rem;">Hari</small></div></div>
+                <div class="sub-card" style="text-align:center; border: 1px solid var(--warning);"><h4 style="color: var(--warning);">Lewat</h4><div style="font-size: 2rem; font-weight: bold;">5 <small style="font-size:1rem;">Hari</small></div></div>
+                <div class="sub-card" style="text-align:center; border: 1px solid var(--danger);"><h4 style="color: var(--danger);">Tak Hadir</h4><div style="font-size: 2rem; font-weight: bold;">10 <small style="font-size:1rem;">Hari</small></div></div>
+            </div>
+            <table id="indv-table" style="margin-top:20px;">
+                <thead><tr><th>Tarikh</th><th>Status</th><th>Masa</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
-        let hostChart = null;
-
-        // Initialize on load
+        // Initialization Logic
         window.onload = () => {
             document.getElementById('host-overall-date').value = new Date().toISOString().split('T')[0];
-            initChart();
-            // Load dummy data / logic from original file
+            initHostChart();
         };
 
-        function switchMenu(menuId) {
-            // Hide all sections
-            document.querySelectorAll('.host-section').forEach(s => s.classList.add('hidden'));
-            // Remove active from all nav buttons
-            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+        function switchMenu(menuId, role) {
+            document.querySelectorAll('.menu-section').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-links button').forEach(el => el.classList.remove('active'));
             
-            // Show target
-            document.getElementById(`menu-host-${menuId}`).classList.remove('hidden');
-            document.getElementById(`nav-${menuId}`).classList.add('active');
-            
-            if(menuId === 'statistik') initChart();
+            document.getElementById(`menu-${role}-${menuId}`).classList.remove('hidden');
+            document.getElementById(`btn-${role}-${menuId}`).classList.add('active');
         }
 
-        function initChart() {
+        function showPage(pageId) {
+            document.querySelectorAll('.container').forEach(el => el.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        function initHostChart() {
             const ctx = document.getElementById('hostOverallChart').getContext('2d');
-            if(hostChart) hostChart.destroy();
-            
-            hostChart = new Chart(ctx, {
-                type: 'doughnut',
+            new Chart(ctx, {
+                type: 'bar',
                 data: {
-                    labels: ['Hadir', 'Lewat', 'Tidak Hadir'],
+                    labels: ['Hadir', 'Lewat', 'Tak Hadir'],
                     datasets: [{
-                        data: [70, 10, 20],
-                        backgroundColor: ['#22c55e', '#f59e0b', '#ef4444'],
-                        borderWidth: 0
+                        data: [120, 15, 20],
+                        backgroundColor: ['#22c55e', '#f59e0b', '#ef4444']
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { color: '#f8fafc' } }
-                    }
+                    plugins: { legend: { display: false } },
+                    scales: { y: { ticks: { color: '#fff' } }, x: { ticks: { color: '#fff' } } }
                 }
             });
         }
 
         function logout() {
-            if(confirm("Adakah anda pasti ingin keluar?")) {
-                window.location.href = "index.html"; // Redirect back to login
-            }
-        }
-
-        function searchMurid() {
-            const val = document.getElementById('input-carian').value.toLowerCase();
-            // Integration logic for searching
+            if(confirm("Keluar dari Portal Host?")) window.location.href = "index.html";
         }
     </script>
 </body>
